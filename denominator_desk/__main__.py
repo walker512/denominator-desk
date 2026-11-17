@@ -1,4 +1,5 @@
 import argparse,json,sys
+from . import claims
 from .core import build,verify,Invalid
 
 def main():
@@ -6,8 +7,14 @@ def main():
     sub=parser.add_subparsers(dest='command',required=True)
     c=sub.add_parser('compare');c.add_argument('contract');c.add_argument('before');c.add_argument('after');c.add_argument('--out',required=True)
     v=sub.add_parser('verify');v.add_argument('bundle')
+    c=sub.add_parser('claim-check');c.add_argument('contract');c.add_argument('before');c.add_argument('after');c.add_argument('document');c.add_argument('claim');c.add_argument('--out',required=True);c.add_argument('--require-match',action='store_true')
+    c=sub.add_parser('claim-verify');c.add_argument('bundle');c.add_argument('--require-match',action='store_true')
     args=parser.parse_args()
     try:
+        if args.command.startswith('claim-'):
+            report=claims.verify(args.bundle) if args.command=='claim-verify' else claims.build(args.contract,args.before,args.after,args.document,args.claim,args.out)
+            print(json.dumps({'consistent':True,'status':report['status'],'arithmetic_matches':report['arithmetic_matches'],'semantic_mapping_verified':False,'source_truth_verified':False,'scope':claims.SCOPE}))
+            return 3 if args.require_match and report['arithmetic_matches'] is not True else 0
         if args.command=='verify':result=verify(args.bundle)
         else:
             report=build(args.contract,args.before,args.after,args.out)
