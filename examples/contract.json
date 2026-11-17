@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "before": {
+    "label": "Synthetic before",
+    "definition": {
+      "metric": "successful synthetic jobs",
+      "numerator": "completed jobs",
+      "denominator": "submitted jobs",
+      "population": "synthetic queue",
+      "counting_unit": "job",
+      "window": "one complete observation period",
+      "timezone": "UTC",
+      "exclusions": "none"
+    }
+  },
+  "after": {
+    "label": "Synthetic after",
+    "definition": {
+      "metric": "successful synthetic jobs",
+      "numerator": "completed jobs",
+      "denominator": "submitted jobs",
+      "population": "synthetic queue",
+      "counting_unit": "job",
+      "window": "one complete observation period",
+      "timezone": "UTC",
+      "exclusions": "none"
+    }
+  }
+}
