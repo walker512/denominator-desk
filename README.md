@@ -58,10 +58,16 @@ An actual pandas 2.2.3 calculation on the identical synthetic CSVs produced matc
 
 The 25 public tests cover a hand-worked reversal, 40 seeded arithmetic cases, definition changes, zero/missing groups, malformed inputs, HTML escaping, tampering, special-file refusal and the actual CLI roundtrip. FIFO testing skips on non-POSIX systems; symlink testing can skip where the OS forbids creating one. A skipped test is not a platform-security pass.
 
-Current execution is local Linux Python 3.12 only. The HTML output has not yet received independent browser/visual acceptance. Windows/macOS and real-user usability are untested. This candidate awaits independent review; no deployment, public release or star-growth claim is made.
+Current execution is local Linux Python 3.12 only. The HTML output has not yet received independent browser/visual acceptance. Windows/macOS and real-user usability are untested. The original arithmetic core was independently reviewed and publicly delivered. New increments require their own review; neither that history nor these tests demonstrate adoption or star growth.
 
 ## License
 
 MIT, copyright 2026 walker512. Original synthetic fixtures; no competitor code or private data is bundled. Input data supplied later remains subject to its own rights and privacy obligations.
 
 Generated report files use explicit UTF-8 bytes with LF newlines so platform text translation cannot break self-verification. Supplied CSV/contract bytes are preserved exactly, including any original CRLF. A byte-level regression exercises this distinction; it is not a claim that Windows was actually tested.
+
+## Check a numeric excerpt against the supplied table
+
+The optional [numeric-excerpt workflow](docs/NUMERIC_EXCERPTS.md) puts a local quote beside all supplied group counts and definitions, then checks a **human-selected** overall proportion/percentage-point/relative-percent formula with exact arithmetic and explicit rounding. Correct the mapping or inputs and rebuild into a new bundle. It does not automatically interpret articles or authenticate the underlying figures. Source documents are copied in full, not redacted to the displayed quote.
+
+Use `claim-check` / `claim-verify`; the original `compare` / `verify` and 25 tests are unchanged. The current suite has 45 public tests, run locally on Linux/Python 3.12, including 20 excerpt tests. New HTML remains unverified in a real browser; generated-text escaping and CLI tests are not visual acceptance.
