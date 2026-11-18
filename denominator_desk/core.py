@@ -153,12 +153,27 @@ def render(report):
     return '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; style-src &#39;unsafe-inline&#39;"><title>Denominator Desk</title><style>body{max-width:1100px;margin:auto;padding:24px;font:16px/1.6 system-ui;overflow-wrap:anywhere}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:8px;text-align:left}td{max-width:320px}</style>'+body+'</html>'
 
 def canonical(data):return json.dumps(data,ensure_ascii=False,sort_keys=True,indent=2,allow_nan=False)+'\n'
+def write_private_bundle(out,files):
+    """Internal fixed-name writer; trusted parent required, no existing output reuse.
+
+    Mode bits constrain creation on POSIX (umask can restrict further). A failed
+    write leaves a partial private folder, deliberately not removed or reused.
+    This is not Windows ACL protection or protection from same-account tampering.
+    """
+    root=Path(out)
+    root.mkdir(mode=0o700,exist_ok=False)
+    for name,data in files.items():
+        fd=os.open(root/name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|
+                   getattr(os,'O_NOFOLLOW',0)|getattr(os,'O_BINARY',0),0o600)
+        with os.fdopen(fd,'wb') as stream:
+            stream.write(data)
+
 def build(spec,before,after,out):
     raw=[read(x) for x in (spec,before,after)];report=analyze(*raw)
-    output=Path(out);output.mkdir(exist_ok=False)
-    for name,data in zip(('contract.json','before.csv','after.csv'),raw):(output/name).write_bytes(data)
-    (output/'report.json').write_bytes(canonical(report).encode('utf8'))
-    (output/'index.html').write_bytes(render(report).encode('utf8'))
+    files=dict(zip(('contract.json','before.csv','after.csv'),raw))
+    files['report.json']=canonical(report).encode('utf8')
+    files['index.html']=render(report).encode('utf8')
+    write_private_bundle(out,files)
     return report
 
 def verify(folder):

@@ -98,8 +98,7 @@ arithmetic matches. No automatic source selection or semantic correction is used
 New revision output is exclusively created with POSIX directory/file modes
 0700/0600, subject to a possibly stricter umask. Existing output is never reused.
 A write failure may leave a private partial folder; it is not a valid result and
-verification rejects it. This does not retrofit privacy into older `compare` or
-`claim-check` bundles. Use a trusted parent directory; hostile same-account path
+verification rejects it. Previously created bundles are not changed automatically. Use a trusted parent directory; hostile same-account path
 replacement, ACLs, Windows access control, encryption and secure deletion are not
 provided. These bundles can contain sensitive text despite private mode bits.
 
@@ -129,3 +128,25 @@ remain needs-review. Declared component sums use conservative rounding intervals
 a one-unit display discrepancy can be rounding-compatible rather than erroneous.
 Compatibility means only that some values inside the declared intervals can
 satisfy the identity, not that the identity, source or interpretation is true.
+
+## Private creation for compare and claim-check
+
+New `compare` and `claim-check` outputs now request directory mode 0700 and
+file mode 0600 **at creation**, subject to a stricter umask on POSIX. File creation
+is exclusive: neither existing directories, files nor final-path symlinks are
+reused or overwritten. Report content and verification format are unchanged;
+older bundles remain verifiable without changing their bytes or permissions.
+
+Use a trusted parent directory. These mode bits do not establish Windows ACL
+privacy, encryption, secure deletion, or protection against same-account path
+replacement. Windows access control has not been tested. Earlier outputs may
+still be readable by other accounts: this patch does not locate or chmod them.
+A write failure can leave a private partial directory; verification rejects an
+incomplete bundle and rerunning must use a fresh destination. Publication is not
+atomic and no hard-power-loss durability is claimed.
+
+Privacy-patch validation: 92 tests passed with zero skips on Linux/Python 3.12
+(85 existing and 7 new tests). New tests cover creation-time modes under umask
+000/022, both legacy CLI roundtrips, existing-bundle compatibility, exclusive
+concurrent output creation, symlink/member injection and partial-write failure.
+No Windows ACL or new browser validation is claimed.

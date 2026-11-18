@@ -69,8 +69,7 @@ NAMES=('contract.json','before.csv','after.csv','document.txt','claim.json')
 def build(contract,before,after,document,claim,out):
  raws=[core.read(p) for p in (contract,before,after,document,claim)];report=analyze(*raws);files=outputs(report)
  if any(len(v)>core.MAX_BYTES for v in files.values()):raise core.Invalid('Generated report exceeds 2 MiB.')
- files.update(dict(zip(NAMES,raws)));root=Path(out);root.mkdir(exist_ok=False)
- for n,v in files.items():(root/n).write_bytes(v)
+ files.update(dict(zip(NAMES,raws)));core.write_private_bundle(out,files)
  return report
 
 def verify(folder):
