@@ -70,4 +70,43 @@ Generated report files use explicit UTF-8 bytes with LF newlines so platform tex
 
 The optional [numeric-excerpt workflow](docs/NUMERIC_EXCERPTS.md) puts a local quote beside all supplied group counts and definitions, then checks a **human-selected** overall proportion/percentage-point/relative-percent formula with exact arithmetic and explicit rounding. Correct the mapping or inputs and rebuild into a new bundle. It does not automatically interpret articles or authenticate the underlying figures. Source documents are copied in full, not redacted to the displayed quote.
 
-Use `claim-check` / `claim-verify`; the original `compare` / `verify` and 25 tests are unchanged. The current suite has 45 public tests, run locally on Linux/Python 3.12, including 20 excerpt tests. New HTML remains unverified in a real browser; generated-text escaping and CLI tests are not visual acceptance.
+Use `claim-check` / `claim-verify`; the original `compare` / `verify` and 25 tests are unchanged. The historical 0.2 suite had 45 public tests, run locally on Linux/Python 3.12, including 20 excerpt tests. New HTML remains unverified in a real browser; generated-text escaping and CLI tests are not visual acceptance.
+
+## Review a manual correction without hiding changed evidence
+
+`revision-check` compares two complete, self-consistent `claim-check` bundles. It
+captures each source once, recomputes both reviews, and rejects mismatched input
+bundles before producing output. The side-by-side review shows the original and
+revised quote, mapping, exact arithmetic and status, then enumerates changed
+period labels, definitions, per-group counts, mapping offsets and result fields.
+Byte hashes additionally flag whitespace-only changes or edits outside the quote.
+
+```sh
+python -m denominator_desk revision-check original-claim revised-claim --out revision-review
+python -m denominator_desk revision-verify revision-review
+```
+
+Open `revision-review/index.html` locally. For example, changing a mapping from
+relative percent to percentage points can turn a mismatch into an arithmetic
+match; the ledger makes that change explicit rather than approving the revision.
+Both complete sets of original source bytes are retained, including full articles.
+`revision-verify` recomputes the ledger and static HTML. Exit 0 means consistency,
+not correctness, improvement, justified correction, authorship or a trustworthy
+chronological history. `correction_justified` remains unknown even when the new
+arithmetic matches. No automatic source selection or semantic correction is used.
+
+New revision output is exclusively created with POSIX directory/file modes
+0700/0600, subject to a possibly stricter umask. Existing output is never reused.
+A write failure may leave a private partial folder; it is not a valid result and
+verification rejects it. This does not retrofit privacy into older `compare` or
+`claim-check` bundles. Use a trusted parent directory; hostile same-account path
+replacement, ACLs, Windows access control, encryption and secure deletion are not
+provided. These bundles can contain sensitive text despite private mode bits.
+
+Candidate validation: 63 tests passed with zero skips on Linux/Python 3.12 (45
+existing plus 18 revision tests), including real CLI roundtrips, complete member
+tampering, malformed bundles, output-size preflight, injected write failure and
+creation permissions. Static escaping tests do not establish browser acceptance.
+No real news accuracy, user study, Windows/macOS or hosted CI validation is claimed.
+
+A real Chromium desktop preview of the new synthetic revision report was inspected: both quotes, percent-versus-percentage-point mapping, exact and rounded values, warning and change ledger were visible side by side. This is builder visual evidence for the new static report, not an interactive editor, independent browser acceptance, mobile or cross-browser testing. An offline-built wheel installed in a fresh virtual environment verified the demo revision bundle outside the source tree.
