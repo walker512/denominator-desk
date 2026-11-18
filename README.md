@@ -103,10 +103,29 @@ verification rejects it. This does not retrofit privacy into older `compare` or
 replacement, ACLs, Windows access control, encryption and secure deletion are not
 provided. These bundles can contain sensitive text despite private mode bits.
 
-Candidate validation: 63 tests passed with zero skips on Linux/Python 3.12 (45
+Revision-workflow validation at its publication: 63 tests passed with zero skips on Linux/Python 3.12 (45
 existing plus 18 revision tests), including real CLI roundtrips, complete member
 tampering, malformed bundles, output-size preflight, injected write failure and
 creation permissions. Static escaping tests do not establish browser acceptance.
 No real news accuracy, user study, Windows/macOS or hosted CI validation is claimed.
 
 A real Chromium desktop preview of the new synthetic revision report was inspected: both quotes, percent-versus-percentage-point mapping, exact and rounded values, warning and change ledger were visible side by side. This is builder visual evidence for the new static report, not an interactive editor, independent browser acceptance, mobile or cross-browser testing. An offline-built wheel installed in a fresh virtual environment verified the demo revision bundle outside the source tree.
+
+## Signed money and rounded accounting totals
+
+Proportion CSVs still reject negative values. Use the separate signed-amount
+workflow instead; **do not turn a net outflow into a nonnegative denominator**.
+
+```sh
+python -m denominator_desk amount-check examples/amount-source.txt examples/amounts.json --out amount-review
+python -m denominator_desk amount-verify amount-review
+```
+
+The [amount contract](docs/SIGNED_AMOUNTS.md) uses manually declared currency,
+unit, explicit start/end dates, metric, net/gross basis, sign convention, source
+quote and explanation. Same-currency units are converted exactly, never exchanged
+between currencies. Comparisons with different contexts or unknown rounding
+remain needs-review. Declared component sums use conservative rounding intervals;
+a one-unit display discrepancy can be rounding-compatible rather than erroneous.
+Compatibility means only that some values inside the declared intervals can
+satisfy the identity, not that the identity, source or interpretation is true.
