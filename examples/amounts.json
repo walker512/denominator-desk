@@ -1,0 +1,169 @@
+{
+  "schema": 1,
+  "source_label": "SAFE 2026 Q3 initial table, manual transcription; verify against linked source",
+  "observations": [
+    {
+      "id": "usd_liabilities",
+      "value": "-9",
+      "unit": "hundred_million",
+      "currency": "USD",
+      "period": {
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "metric": "direct_investment_liabilities",
+      "basis": "net",
+      "sign_convention": "source_signed_balance",
+      "rounding": "nearest",
+      "source_quote": "USD hundred-million: -9, 22, -31.",
+      "explanation": "Human mapping to the selected official table row."
+    },
+    {
+      "id": "usd_equity",
+      "value": "22",
+      "unit": "hundred_million",
+      "currency": "USD",
+      "period": {
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "metric": "direct_investment_equity",
+      "basis": "net",
+      "sign_convention": "source_signed_balance",
+      "rounding": "nearest",
+      "source_quote": "USD hundred-million: -9, 22, -31.",
+      "explanation": "Human mapping to the selected official table row."
+    },
+    {
+      "id": "usd_debt",
+      "value": "-31",
+      "unit": "hundred_million",
+      "currency": "USD",
+      "period": {
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "metric": "direct_investment_debt",
+      "basis": "net",
+      "sign_convention": "source_signed_balance",
+      "rounding": "nearest",
+      "source_quote": "USD hundred-million: -9, 22, -31.",
+      "explanation": "Human mapping to the selected official table row."
+    },
+    {
+      "id": "cny_liabilities",
+      "value": "-60",
+      "unit": "hundred_million",
+      "currency": "CNY",
+      "period": {
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "metric": "direct_investment_liabilities",
+      "basis": "net",
+      "sign_convention": "source_signed_balance",
+      "rounding": "nearest",
+      "source_quote": "CNY hundred-million: -60, 148, -209.",
+      "explanation": "Human mapping to the selected official table row."
+    },
+    {
+      "id": "cny_equity",
+      "value": "148",
+      "unit": "hundred_million",
+      "currency": "CNY",
+      "period": {
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "metric": "direct_investment_equity",
+      "basis": "net",
+      "sign_convention": "source_signed_balance",
+      "rounding": "nearest",
+      "source_quote": "CNY hundred-million: -60, 148, -209.",
+      "explanation": "Human mapping to the selected official table row."
+    },
+    {
+      "id": "cny_debt",
+      "value": "-209",
+      "unit": "hundred_million",
+      "currency": "CNY",
+      "period": {
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "metric": "direct_investment_debt",
+      "basis": "net",
+      "sign_convention": "source_signed_balance",
+      "rounding": "nearest",
+      "source_quote": "CNY hundred-million: -60, 148, -209.",
+      "explanation": "Human mapping to the selected official table row."
+    },
+    {
+      "id": "usd_ytd",
+      "value": "600",
+      "unit": "hundred_million",
+      "currency": "USD",
+      "period": {
+        "start": "2026-01-01",
+        "end": "2026-09-30"
+      },
+      "metric": "direct_investment_liabilities",
+      "basis": "net",
+      "sign_convention": "source_signed_balance",
+      "rounding": "nearest",
+      "source_quote": "Q1-Q3 2026 direct investment liabilities (net): USD 600 hundred-million.",
+      "explanation": "Cumulative three-quarter period; not the third quarter alone."
+    },
+    {
+      "id": "usd_new_capital",
+      "value": "180",
+      "unit": "hundred_million",
+      "currency": "USD",
+      "period": {
+        "start": "2026-07-01",
+        "end": "2026-09-30"
+      },
+      "metric": "new_capital_additions",
+      "basis": "gross",
+      "sign_convention": "source_signed_balance",
+      "rounding": "nearest",
+      "source_quote": "Additional new capital in Q3: USD 180 hundred-million; not the equity net row.",
+      "explanation": "Human-labeled additions, not a net equity balance."
+    }
+  ],
+  "checks": [
+    {
+      "type": "sum",
+      "total": "usd_liabilities",
+      "components": [
+        "usd_equity",
+        "usd_debt"
+      ],
+      "identity_note": "Human-declared liabilities = equity + debt net balances for the same period."
+    },
+    {
+      "type": "sum",
+      "total": "cny_liabilities",
+      "components": [
+        "cny_equity",
+        "cny_debt"
+      ],
+      "identity_note": "Human-declared liabilities = equity + debt net balances for the same period."
+    },
+    {
+      "type": "compare",
+      "left": "usd_liabilities",
+      "right": "usd_ytd"
+    },
+    {
+      "type": "compare",
+      "left": "usd_equity",
+      "right": "usd_new_capital"
+    },
+    {
+      "type": "compare",
+      "left": "usd_liabilities",
+      "right": "cny_liabilities"
+    }
+  ]
+}

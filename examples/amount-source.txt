@@ -1,0 +1,10 @@
+Manually transcribed numeric cells, not an archived official webpage.
+Source: https://www.safe.gov.cn/safe/2026/1113/28095.html
+Publication date: 2026-11-13. Initial balance-of-payments figures.
+Q3 2026: direct investment liabilities (net), equity, debt instruments.
+USD hundred-million: -9, 22, -31.
+CNY hundred-million: -60, 148, -209.
+The source states that the table uses rounding.
+Additional new capital in Q3: USD 180 hundred-million; not the equity net row.
+Q1-Q3 2026 direct investment liabilities (net): USD 600 hundred-million.
+Human-selected rows and interpretation require source review. No causality inferred.
