@@ -129,6 +129,10 @@ a one-unit display discrepancy can be rounding-compatible rather than erroneous.
 Compatibility means only that some values inside the declared intervals can
 satisfy the identity, not that the identity, source or interpretation is true.
 
+For automated checks, add `--require-compatible` when building or verifying
+an amount review. Exit 3 flags incompatible or unresolved checks while
+retaining the report; see the [amount gate](docs/SIGNED_AMOUNTS.md#optional-arithmetic-gate).
+
 ## Private creation for compare and claim-check
 
 New `compare` and `claim-check` outputs now request directory mode 0700 and

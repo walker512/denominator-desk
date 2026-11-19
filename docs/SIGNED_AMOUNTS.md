@@ -81,6 +81,21 @@ can leave a private incomplete directory, rejected by verify; it is not silently
 removed or reused. Existing legacy bundles are not re-permissioned. Trusted parent
 directories are required; no hostile same-account path-race/ACL/encryption guarantee.
 
+## Optional arithmetic gate
+
+Add `--require-compatible` to either `amount-check` or `amount-verify` to
+make the process status usable in CI. Exit **0** means all checks are exact
+matches or compatible under the declared rounding intervals. Exit **3** means
+at least one check is incompatible or still needs review. In both cases, stdout
+lists the same statuses as the ordinary command. With `amount-check`, exit 3
+still leaves the complete review bundle for manual inspection. An invalid
+invocation or input, a failed write, or inconsistent bundle exits **2**.
+
+The flag does not change the verification contract or bundle bytes. It is off
+by default and does not certify the mapping, source, or underlying accounting
+identity. The supplied example includes unmatched contexts, so it deliberately
+exits 3 with the flag.
+
 ## Candidate validation
 
 85 tests pass, zero skips, Linux/Python 3.12: 63 existing and 22 signed-amount tests.

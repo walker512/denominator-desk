@@ -11,13 +11,36 @@ def main():
     c=sub.add_parser('claim-verify');c.add_argument('bundle');c.add_argument('--require-match',action='store_true')
     c=sub.add_parser('revision-check');c.add_argument('original');c.add_argument('revised');c.add_argument('--out',required=True)
     c=sub.add_parser('revision-verify');c.add_argument('bundle')
-    c=sub.add_parser('amount-check');c.add_argument('source');c.add_argument('spec');c.add_argument('--out',required=True)
-    c=sub.add_parser('amount-verify');c.add_argument('bundle')
+    amount_check = sub.add_parser('amount-check')
+    amount_check.add_argument('source')
+    amount_check.add_argument('spec')
+    amount_check.add_argument('--out', required=True)
+    amount_verify = sub.add_parser('amount-verify')
+    amount_verify.add_argument('bundle')
+    for amount_parser in (amount_check, amount_verify):
+        amount_parser.add_argument(
+            '--require-compatible',
+            action='store_true',
+            help='Exit 3 if any declared amount check is incompatible or needs review.',
+        )
     args=parser.parse_args()
     try:
         if args.command.startswith('amount-'):
             report=amounts.verify(args.bundle) if args.command=='amount-verify' else amounts.build(args.source,args.spec,args.out)
-            print(json.dumps({'consistent':True,'statuses':[r['status'] for r in report['checks']],'source_truth_verified':False,'source_mapping_verified':False,'scope':amounts.SCOPE}))
+            statuses = [row['status'] for row in report['checks']]
+            print(json.dumps({
+                'consistent': True,
+                'statuses': statuses,
+                'source_truth_verified': False,
+                'source_mapping_verified': False,
+                'scope': amounts.SCOPE,
+            }))
+            compatible_statuses = {
+                'equal_under_exact_declarations',
+                'compatible_with_declared_rounding',
+            }
+            if args.require_compatible and not all(status in compatible_statuses for status in statuses):
+                return 3
             return 0
         if args.command.startswith('revision-'):
             report=revisions.verify(args.bundle) if args.command=='revision-verify' else revisions.build(args.original,args.revised,args.out)
